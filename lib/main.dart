@@ -10,7 +10,8 @@ enum Screen { main, ale, maryel, fra, manu }
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
+  await SystemChrome.setPreferredOrientations(
+      [Platform.isIOS ? DeviceOrientation.landscapeRight : DeviceOrientation.landscapeLeft]);
 
   runApp(
     const MaterialApp(home: MyApp()),
@@ -73,25 +74,27 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screen == Screen.main
-          ? Padding(
-              padding: const EdgeInsets.all(30),
-              child: Center(
-                child: TextFormField(
-                  controller: textEditingController,
-                  decoration: const InputDecoration(
-                    hintText: 'Inserire il codice segreto',
+      body: SafeArea(
+        child: screen == Screen.main
+            ? Padding(
+                padding: const EdgeInsets.all(30),
+                child: Center(
+                  child: TextFormField(
+                    controller: textEditingController,
+                    decoration: const InputDecoration(
+                      hintText: 'Inserire il codice segreto',
+                    ),
                   ),
                 ),
-              ),
-            )
-          : screen == Screen.ale
-              ? Ale(flutterMidi)
-              : screen == Screen.fra
-                  ? Fra(flutterMidi)
-                  : screen == Screen.manu
-                      ? Manu(flutterMidi)
-                      : Maryel(flutterMidi),
+              )
+            : screen == Screen.ale
+                ? Ale(flutterMidi)
+                : screen == Screen.fra
+                    ? Fra(flutterMidi)
+                    : screen == Screen.manu
+                        ? Manu(flutterMidi)
+                        : Maryel(flutterMidi),
+      ),
     );
   }
 }
